@@ -34,7 +34,10 @@ function App() {
     }
   };
   return (
-    <div style={{ width: "100vw", height: "100vh" }} onMouseMove={updateValues}>
+    <div
+      className="w-screen h-screen flex justify-center items-center"
+      onMouseMove={updateValues}
+    >
       <button onClick={toggleAudio}>{running ? "🔊" : "🔇"}</button>
     </div>
   );
