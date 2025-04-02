@@ -1,46 +1,34 @@
 import { useState } from "react";
+import "@xyflow/react/dist/style.css";
 import "./App.css";
-import { Button } from "@/components/ui/button";
+import { Background, ReactFlow } from "@xyflow/react";
+import { useStore, type StoreApi } from "@/store";
+import { shallow } from "zustand/shallow";
 
-const context = new AudioContext();
-const osc = context.createOscillator();
-const amp = context.createGain();
+import Osc from "@/nodes/Osc";
 
-osc.connect(amp);
-amp.connect(context.destination);
+const selector = (store: StoreApi) => ({
+  nodes: store.nodes,
+  edges: store.edges,
+  onNodesChange: store.onNodesChange,
+  onEdgesChange: store.onEdgesChange,
+  addEdge: store.addEdge,
+});
 
-osc.start();
+const nodeTypes = { osc: Osc };
 
 function App() {
-  const [running, setRunning] = useState(false);
-
-  const updateValues = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const freq = (e.clientX / window.innerWidth) * 1000;
-    const gain = e.clientY / window.innerHeight;
-
-    osc.frequency.value = freq;
-    amp.gain.value = gain;
-  };
-
-  const toggleAudio = () => {
-    if (context.state === "suspended") {
-      context.resume().then(() => {
-        setRunning(true);
-      });
-    }
-    if (context.state === "running") {
-      context.suspend().then(() => {
-        setRunning(false);
-      });
-    }
-  };
+  const store = useStore(selector, shallow);
   return (
-    <div
-      className="w-screen h-screen flex justify-center items-center"
-      onMouseMove={updateValues}
+    <ReactFlow
+      nodes={store.nodes}
+      nodeTypes={nodeTypes}
+      edges={store.edges}
+      onNodesChange={store.onNodesChange}
+      onEdgesChange={store.onEdgesChange}
     >
-      <Button onClick={toggleAudio}>{running ? "🔊" : "🔇"}</Button>
-    </div>
+      <Background />
+    </ReactFlow>
   );
 }
 
