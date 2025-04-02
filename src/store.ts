@@ -16,6 +16,8 @@ export interface StoreApi {
   onEdgesChange: (changes: EdgeChange[]) => void;
   addEdge: (data: Omit<Edge, "id">) => void;
   updateNode: (id: string, data: Partial<AudioNode>) => void;
+  isRunning: boolean;
+  toggleAudio: () => void;
 }
 
 export interface AudioNode extends Node {
@@ -31,8 +33,15 @@ export const useStore = createWithEqualityFn<StoreApi>((set, get) => ({
       data: { frequency: 220, type: "square" },
       position: { x: 0, y: 0 },
     },
+    { id: "c", type: "out", position: { x: 100, y: 500 }, data: {} },
   ],
   edges: [],
+
+  isRunning: false,
+
+  toggleAudio: () => {
+    set({ isRunning: !get().isRunning });
+  },
 
   onNodesChange: (changes: NodeChange[]) => {
     set({ nodes: applyNodeChanges(changes, get().nodes) });

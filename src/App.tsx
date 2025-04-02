@@ -6,6 +6,7 @@ import { useStore, type StoreApi } from "@/store";
 import { shallow } from "zustand/shallow";
 
 import Osc from "@/nodes/Osc";
+import Out from "@/nodes/Out";
 
 const selector = (store: StoreApi) => ({
   nodes: store.nodes,
@@ -15,7 +16,7 @@ const selector = (store: StoreApi) => ({
   addEdge: store.addEdge,
 });
 
-const nodeTypes = { osc: Osc };
+const nodeTypes = { osc: Osc, out: Out };
 
 function App() {
   const store = useStore(selector, shallow);
@@ -26,6 +27,7 @@ function App() {
       edges={store.edges}
       onNodesChange={store.onNodesChange}
       onEdgesChange={store.onEdgesChange}
+      onConnect={store.addEdge}
     >
       <Background />
     </ReactFlow>
