@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/select";
 
 const selector = (id: string) => (store: StoreApi) => ({
-  setFrequency: (e) => store.updateNode(id, { frequency: +e.target.value }),
-  setType: (e) => store.updateNode(id, { type: e.target.value }),
+  setFrequency: (frequency: number[]) =>
+    store.updateNode(id, { frequency: frequency[0] }),
+  setType: (type: OscillatorType) => store.updateNode(id, { type }),
 });
 
 export default function Osc({ id, data }: { id: string; data: AudioNode }) {
@@ -34,7 +35,7 @@ export default function Osc({ id, data }: { id: string; data: AudioNode }) {
             min={10}
             max={1000}
             defaultValue={[data.frequency]}
-            onChange={setFrequency}
+            onValueChange={setFrequency}
           />
           <div className="w-full text-right text-gray-700">
             {data.frequency}Hz
