@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import { Button } from "@/components/ui/button";
 
 const context = new AudioContext();
 const osc = context.createOscillator();
@@ -38,7 +39,7 @@ function App() {
       className="w-screen h-screen flex justify-center items-center"
       onMouseMove={updateValues}
     >
-      <button onClick={toggleAudio}>{running ? "🔊" : "🔇"}</button>
+      <Button onClick={toggleAudio}>{running ? "🔊" : "🔇"}</Button>
     </div>
   );
 }
